@@ -12,6 +12,7 @@ import Data.Refinery.Core (class Validate, EvalTree(..))
 import Data.Typelevel.Num (class Nat, toInt)
 import Data.Typelevel.Num as N
 import Data.Typelevel.Undefined (undefined)
+import Data.Refinery.Predicate.Logical (type (||))
 
 data Odd
 
@@ -67,3 +68,9 @@ type Pos
 
 type Neg
   = Lt N.D0
+
+type Le n
+  = Eq n || Lt n
+
+type Ge n
+  = Eq n || Gt n
