@@ -5,7 +5,7 @@ import Data.Array as Array
 import Data.FunctorWithIndex (mapWithIndex)
 import Data.Maybe (Maybe(..))
 import Data.Monoid (guard)
-import Data.Refinery.Core (Error, EvalTree(..), EvalNode)
+import Data.Refinery.Core (Error, EvalNode, EvalTree(..))
 import Data.String as String
 import Data.Tuple.Nested ((/\))
 
@@ -25,7 +25,7 @@ printError { value, evalTree } =
   where
   go = case _ of
     Or r1 r2 ->
-      printSection go "One of this must hold:"
+      printSection go "At least one of this must hold:"
         (explodeOr r1 <> explodeOr r2)
     Xor r1 r2 ->
       printSection go "Only one of this must hold:"

@@ -9,7 +9,7 @@ module Data.Refinery.Predicate.Logical
   ) where
 
 import Prelude
-import Data.Refinery.Core (class Validate, Error(..), EvalTree(..), validate)
+import Data.Refinery.Core (class Validate, EvalTree(..), validate)
 import Data.Typelevel.Undefined (undefined)
 
 data Not p

@@ -3,10 +3,12 @@ module Data.Refinery.Predicate.Numeric
   , Even
   , Pos
   , Gt
+  , Lt
+  , Eq
   ) where
 
 import Prelude
-import Data.Refinery.Core (class Validate, Error(..), EvalTree(..))
+import Data.Refinery.Core (class Validate, EvalTree(..))
 import Data.Typelevel.Num (class Nat, toInt)
 import Data.Typelevel.Num as N
 import Data.Typelevel.Undefined (undefined)
@@ -27,15 +29,6 @@ instance validateEven :: (Eq a, EuclideanRing a) => Validate Even a where
     , evalTree: Satisfy "even"
     }
 
-data NonNeg
-
-instance validateNonNeg :: (Ord a, EuclideanRing a) => Validate NonNeg a where
-  validate _ i =
-    { result: i <= zero
-    , evalTree: Satisfy "non negative"
-    }
-
---
 data Eq n
 
 instance validateEq :: (Nat n) => Validate (Eq n) Int where
