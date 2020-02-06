@@ -1,7 +1,8 @@
 module Data.Refinery.Core
   ( Refined
   , Error(..)
-  , Result
+  , EvalTree(..)
+  , EvalNode
   , refine
   , unrefine
   , class Validate
@@ -18,23 +19,26 @@ newtype Refined p a
   = Refined a
 
 class Validate p a where
-  validate :: p -> a -> Result
+  validate :: p -> a -> EvalNode
 
-type Result
+type EvalNode
   = { result :: Boolean
-    , error :: Error
+    , evalTree :: EvalTree
     }
 
-data Error
-  = Or Result Result
-  | Xor Result Result
-  | And Result Result
+data EvalTree
+  = Or EvalNode EvalNode
+  | Xor EvalNode EvalNode
+  | And EvalNode EvalNode
+  | Not EvalNode
   | Satisfy String
-  | Not Result
 
-derive instance genericError :: Generic Error _
+type Error a
+  = { value :: a, evalTree :: EvalTree }
 
-instance showError :: Show Error where
+derive instance genericEvalTree :: Generic EvalTree _
+
+instance showEvalTree :: Show EvalTree where
   show x = genericShow x
 
 derive instance genericRefined :: Generic (Refined p a) _
@@ -42,11 +46,15 @@ derive instance genericRefined :: Generic (Refined p a) _
 instance showRefined :: Show a => Show (Refined p a) where
   show = genericShow
 
-refine :: forall p a. (Validate p a) => a -> Either Error (Refined p a)
+refine :: forall p a. (Validate p a) => a -> Either (Error a) (Refined p a)
 refine x
   | (validate (undefined :: p) x).result = Right $ Refined x
 
-refine x = Left $ (validate (undefined :: p) x).error
+refine x =
+  Left
+    $ { value: x
+      , evalTree: (validate (undefined :: p) x).evalTree
+      }
 
 unrefine :: forall t a. Refined t a -> a
 unrefine (Refined x) = x

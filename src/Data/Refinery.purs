@@ -2,8 +2,8 @@ module Data.Refinery (module Exp) where
 
 import Data.Refinery.Core
   ( Refined
-  , Error(..)
-  , Result
+  , Error
+  , EvalTree(..)
   , refine
   , unrefine
   , class Validate
@@ -11,10 +11,13 @@ import Data.Refinery.Core
   )
   as Exp
 import Data.Refinery.Predicate.Logical
-  ( And
+  ( Not
+  , And
+  , type (&&)
   , Or
+  , type (||)
   , Xor
-  , Not
+  , type (|||)
   )
   as Exp
 import Data.Refinery.PrettyPrint
