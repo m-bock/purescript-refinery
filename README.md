@@ -54,7 +54,7 @@ refine 6 :: Either _ H
 instance validateCustom :: Validate Custom Int where
   validate _ i =
     { result: i == 1234
-    , evalTree: Satisfy $ "must be 1234"
+    , evalTree: Satisfy $ "1234"
     }
 
 type G
